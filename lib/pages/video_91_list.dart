@@ -2,12 +2,11 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-31 21:38:18
- * @LastEditTime: 2021-10-03 13:09:56
+ * @LastEditTime: 2021-10-03 14:03:05
  */
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sex_91porn/model/category_model.dart';
 import 'package:sex_91porn/model/video_model.dart';
 import 'package:sex_91porn/service/list_parse.dart';
