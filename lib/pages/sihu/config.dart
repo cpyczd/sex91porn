@@ -2,14 +2,32 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2022-03-19 15:54:04
- * @LastEditTime: 2022-03-19 16:58:26
+ * @LastEditTime: 2022-03-20 00:28:31
  */
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:sex_91porn/pages/sihu/model_entity.dart';
 
-const MAIN_URL = "https://www.b1b33.com";
+const MAIN_URL = "https://www.4hu.tv";
 
-const M3U8_BASE_URL = "https://m3u8.63cdn.com";
+final _PLAY_SOURCES = [
+  "40cdn",
+  "41cdn",
+  "44cdn",
+  "46cdn",
+  "47cdn",
+  "48cdn",
+  "49cdn",
+  "63cdn",
+  "34cdn",
+  "38cdn"
+];
+
+String getM3u8Url() {
+  var str = _PLAY_SOURCES[Random().nextInt(_PLAY_SOURCES.length)];
+  return "https://m3u8.$str.com";
+}
 
 final CATEGORY_CONFIG = List.of([
   SihuCategoryModel(

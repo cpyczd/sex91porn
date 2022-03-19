@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2022-03-19 17:00:06
- * @LastEditTime: 2022-03-19 22:48:32
+ * @LastEditTime: 2022-03-20 00:31:08
  */
 
 import 'package:html/dom.dart';
@@ -22,7 +22,7 @@ class SihuDataService {
     Element? img = element.querySelector("img");
     Element? i = element.querySelector("i");
     var imgSrc = img?.attributes["data-original"] ?? "-";
-    var m3u8 = M3U8_BASE_URL +
+    var m3u8 = getM3u8Url() +
         "/newhd/" +
         imgSrc
             .substring(imgSrc.indexOf("images/") + 7)
@@ -83,7 +83,7 @@ class SihuDataService {
   ///搜索结果
   static Future<List<VideoModel>> search(String keyword) async {
     var html = await HttpUtil.getHtml(
-        "https://www.b1b33.com/searchs/index.php?keyboard=$keyword&classid=");
+        "$MAIN_URL/searchs/index.php?keyboard=$keyword&classid=");
     Document root = parse(html);
     return root
         .getElementsByClassName("row-book clearfix")[0]
@@ -109,7 +109,7 @@ class SihuDataService {
         .substring(script.indexOf("posterImg=") + 11)
         .replaceAll("\";", "");
 
-    var m3u8 = M3U8_BASE_URL +
+    var m3u8 = getM3u8Url() +
         "/newhd/" +
         imgSrc
             .substring(imgSrc.indexOf("images/") + 7)
