@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-30 11:00:05
- * @LastEditTime: 2021-10-03 12:09:04
+ * @LastEditTime: 2022-03-19 23:13:18
  */
 
 import 'package:dio/dio.dart';
@@ -14,9 +14,9 @@ class HttpUtil {
   static CancelToken _cancelToken = CancelToken();
 
   static final Dio _HTTP = Dio(BaseOptions(
-      connectTimeout: 50000,
-      sendTimeout: 50000,
-      receiveTimeout: 50000,
+      connectTimeout: 10000,
+      sendTimeout: 10000,
+      receiveTimeout: 10000,
       headers: {
         "accept-language": "zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6"
       }));

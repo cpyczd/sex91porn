@@ -6,6 +6,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:sex_91porn/pages/channel_page.dart';
 import 'package:sex_91porn/pages/video_91.dart';
 import 'package:sex_91porn/pages/video_db.dart';
 import 'package:sex_91porn/util/application.dart';
@@ -24,7 +25,7 @@ class _IndexPageState extends State<IndexPage>
 
   ///返回NavPage页
   List<Widget> _getPageWidget() {
-    return List.of([Video91Page(), VideoDbPage()]);
+    return List.of([Video91Page(), VideoDbPage(), ChannelPage()]);
   }
 
   @override
@@ -47,7 +48,8 @@ class _IndexPageState extends State<IndexPage>
             BottomNavigationBarItem(
                 icon: Icon(Icons.video_library), label: "实时"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.local_activity), label: "本地历史")
+                icon: Icon(Icons.local_activity), label: "本地历史"),
+            BottomNavigationBarItem(icon: Icon(Icons.list), label: "其他渠道")
           ],
         ),
         body: IndexedStack(

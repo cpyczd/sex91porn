@@ -4,7 +4,7 @@ import 'dart:convert';
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-26 15:18:03
- * @LastEditTime: 2021-10-03 01:11:58
+ * @LastEditTime: 2022-03-19 18:43:08
  */
 
 ///视屏模块
@@ -18,6 +18,8 @@ class VideoModel {
   ///封面
   final String? cover;
 
+  String? dynamicCover;
+
   ///时长
   final String? duration;
 
@@ -30,6 +32,7 @@ class VideoModel {
     required this.id,
     required this.title,
     this.cover,
+    this.dynamicCover,
     this.duration,
     this.href,
     this.src,
@@ -39,6 +42,7 @@ class VideoModel {
     int? id,
     String? title,
     String? cover,
+    String? dynamicCover,
     String? duration,
     String? href,
     String? src,
@@ -47,6 +51,7 @@ class VideoModel {
       id: id ?? this.id,
       title: title ?? this.title,
       cover: cover ?? this.cover,
+      dynamicCover: dynamicCover ?? this.dynamicCover,
       duration: duration ?? this.duration,
       href: href ?? this.href,
       src: src ?? this.src,
@@ -66,8 +71,8 @@ class VideoModel {
 
   factory VideoModel.fromMap(Map<String, dynamic> map) {
     return VideoModel(
-      id: map['id'],
-      title: map['title'],
+      id: map['id']?.toInt() ?? 0,
+      title: map['title'] ?? '',
       cover: map['cover'],
       duration: map['duration'],
       href: map['href'],
@@ -82,7 +87,7 @@ class VideoModel {
 
   @override
   String toString() {
-    return 'VideoModel(id: $id, title: $title, cover: $cover, duration: $duration, href: $href, src: $src)';
+    return 'VideoModel(id: $id, title: $title, cover: $cover, dynamicCover: $dynamicCover, duration: $duration, href: $href, src: $src)';
   }
 
   @override
@@ -93,6 +98,7 @@ class VideoModel {
         other.id == id &&
         other.title == title &&
         other.cover == cover &&
+        other.dynamicCover == dynamicCover &&
         other.duration == duration &&
         other.href == href &&
         other.src == src;
@@ -103,6 +109,7 @@ class VideoModel {
     return id.hashCode ^
         title.hashCode ^
         cover.hashCode ^
+        dynamicCover.hashCode ^
         duration.hashCode ^
         href.hashCode ^
         src.hashCode;

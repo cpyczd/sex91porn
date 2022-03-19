@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-26 15:33:29
- * @LastEditTime: 2021-10-03 12:46:57
+ * @LastEditTime: 2022-03-19 18:44:46
  */
 
 import 'package:sex_91porn/model/video_model.dart';
@@ -63,8 +63,8 @@ class VideoDao extends SqlBaseProvider {
     Database database = await getDataBase();
     //判断库中是否存在记录
     var resList = await database.rawQuery(
-        "select count(N_ID) as count from ${getTableName()} where id = ? limit 1",
-        [model.id]);
+        "select count(N_ID) as count from ${getTableName()} where id != 0 and id = ? or href = ? limit 1",
+        [model.id, model.href]);
     if (resList[0]["count"] != 0) {
       return -1;
     }
