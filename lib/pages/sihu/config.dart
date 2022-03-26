@@ -2,14 +2,15 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2022-03-19 15:54:04
- * @LastEditTime: 2022-03-20 00:28:31
+ * @LastEditTime: 2022-03-25 14:02:29
  */
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:sex_91porn/pages/sihu/model_entity.dart';
 
-const MAIN_URL = "https://www.4hu.tv";
+// const MAIN_URL = "https://www.4hu.tv"; //海外
+const MAIN_URL = "https://www.b2x55.com/";
 
 final _PLAY_SOURCES = [
   "40cdn",
