@@ -4,7 +4,7 @@ import 'dart:convert';
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-26 15:18:03
- * @LastEditTime: 2022-03-19 18:43:08
+ * @LastEditTime: 2022-03-27 21:23:27
  */
 
 ///视屏模块
@@ -14,6 +14,8 @@ class VideoModel {
 
   ///标题
   final String title;
+
+  final String? subTtile;
 
   ///封面
   final String? cover;
@@ -28,34 +30,34 @@ class VideoModel {
 
   ///视屏播放地址 m3u8
   String? src;
-  VideoModel({
-    required this.id,
-    required this.title,
-    this.cover,
-    this.dynamicCover,
-    this.duration,
-    this.href,
-    this.src,
-  });
+  VideoModel(
+      {required this.id,
+      required this.title,
+      this.cover,
+      this.dynamicCover,
+      this.duration,
+      this.href,
+      this.src,
+      this.subTtile});
 
-  VideoModel copyWith({
-    int? id,
-    String? title,
-    String? cover,
-    String? dynamicCover,
-    String? duration,
-    String? href,
-    String? src,
-  }) {
+  VideoModel copyWith(
+      {int? id,
+      String? title,
+      String? cover,
+      String? dynamicCover,
+      String? duration,
+      String? href,
+      String? src,
+      String? subTtile}) {
     return VideoModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      cover: cover ?? this.cover,
-      dynamicCover: dynamicCover ?? this.dynamicCover,
-      duration: duration ?? this.duration,
-      href: href ?? this.href,
-      src: src ?? this.src,
-    );
+        id: id ?? this.id,
+        title: title ?? this.title,
+        cover: cover ?? this.cover,
+        dynamicCover: dynamicCover ?? this.dynamicCover,
+        duration: duration ?? this.duration,
+        href: href ?? this.href,
+        src: src ?? this.src,
+        subTtile: subTtile ?? this.subTtile);
   }
 
   Map<String, dynamic> toMap() {
@@ -87,7 +89,7 @@ class VideoModel {
 
   @override
   String toString() {
-    return 'VideoModel(id: $id, title: $title, cover: $cover, dynamicCover: $dynamicCover, duration: $duration, href: $href, src: $src)';
+    return 'VideoModel(id: $id, title: $title, subTitle: $subTtile cover: $cover, dynamicCover: $dynamicCover, duration: $duration, href: $href, src: $src)';
   }
 
   @override

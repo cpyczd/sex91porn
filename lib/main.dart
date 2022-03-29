@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-25 19:10:23
- * @LastEditTime: 2021-10-03 12:53:11
+ * @LastEditTime: 2022-03-29 19:08:10
  */
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +22,9 @@ class MyApp extends StatelessWidget {
     Routers.configRouters(router);
     Application.router = router;
     HttpUtil.setup();
+
+    //DEV
+    // HttpUtil.setProxy();
 
     return MaterialApp(
       title: 'Free91Porn',

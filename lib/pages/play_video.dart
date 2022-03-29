@@ -2,13 +2,12 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-31 23:17:08
- * @LastEditTime: 2022-03-25 15:07:00
+ * @LastEditTime: 2022-03-29 19:13:05
  */
 import 'package:bruno/bruno.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sex_91porn/model/video_model.dart';
 import 'package:sex_91porn/service/list_parse.dart';
 import 'package:sex_91porn/sql/video_dao.dart';
@@ -80,95 +79,127 @@ class _PlayVideoPageState extends State<PlayVideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: BrnAppBar(
-            brightness: Brightness.dark,
-            title: "Media Player",
-            automaticallyImplyLeading: true),
-        body: Container(
-          padding: EdgeInsets.all(10),
-          child: CustomScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            slivers: [
-              SliverToBoxAdapter(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BrnPairInfoTable(
-                    rowDistance: 7,
-                    isValueAlign: true,
-                    children: [
-                      BrnInfoModal(
-                          keyPart: "影片名称", valuePart: widget.videoModel.title),
-                      BrnInfoModal(
-                          keyPart: "时长", valuePart: widget.videoModel.duration),
-                    ],
-                  )
-                ],
-              )),
-              SliverToBoxAdapter(
-                child: Container(
-                  height: 250,
-                  margin: EdgeInsets.only(top: 15),
-                  color: Colors.black,
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 1,
-                          child: isLoadSrcCode
-                              ? WebViewPlus(
-                                  javascriptMode: JavascriptMode.unrestricted,
-                                  onWebViewCreated: (controller) {
-                                    _controller = controller;
-                                    controller
-                                        .loadUrl("assets/html/index.html");
-                                  },
-                                  onPageFinished: (url) {
-                                    _requestVideoInfo();
-                                  },
-                                  javascriptChannels:
-                                      _createJavaScriptChannel(),
-                                )
-                              : null),
-                      Expanded(
-                          child: onLoad
-                              ? Container(
-                                  child: Center(
-                                    child: // 模糊进度条(会执行一个旋转动画)
-                                        Column(
-                                      children: [
-                                        CircularProgressIndicator(
-                                          backgroundColor: Colors.grey[200],
-                                          valueColor: AlwaysStoppedAnimation(
-                                              Colors.blue),
-                                        ),
-                                        SizedBox.fromSize(
-                                          size: Size.fromHeight(20),
-                                        ),
-                                        Text(
-                                          "解码视屏资源中请稍后...",
-                                          style: TextStyle(color: Colors.white),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              : chewieController != null
-                                  ? Chewie(controller: chewieController!)
-                                  : Center(
-                                      child: Text(
-                                        "视屏解码完成,正在初始化播放...",
-                                        style: TextStyle(
-                                            fontSize: 18, color: Colors.white),
+        body: SafeArea(
+      child: Container(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
+                height: 250,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                            widget.videoModel.cover ?? ""),
+                        fit: BoxFit.cover)),
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                            height: 0,
+                            child: isLoadSrcCode
+                                ? WebViewPlus(
+                                    javascriptMode: JavascriptMode.unrestricted,
+                                    onWebViewCreated: (controller) {
+                                      _controller = controller;
+                                      controller
+                                          .loadUrl("assets/html/index.html");
+                                    },
+                                    onPageFinished: (url) {
+                                      _requestVideoInfo();
+                                    },
+                                    javascriptChannels:
+                                        _createJavaScriptChannel(),
+                                  )
+                                : null),
+                        Expanded(
+                            flex: 1,
+                            child: onLoad
+                                ? Container(
+                                    child: Center(
+                                      child: // 模糊进度条(会执行一个旋转动画)
+                                          Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(
+                                            backgroundColor: Colors.grey[200],
+                                            valueColor: AlwaysStoppedAnimation(
+                                                Colors.blue),
+                                          ),
+                                          SizedBox.fromSize(
+                                            size: Size.fromHeight(15),
+                                          ),
+                                          BrnTagCustom(
+                                            tagText: "解码视屏资源中请稍后...",
+                                            textColor: Colors.white,
+                                            fontSize: 18,
+                                            tagBorderRadius:
+                                                BorderRadius.circular(7),
+                                            textPadding: EdgeInsets.all(5),
+                                            backgroundColor: Colors.black54,
+                                          ),
+                                        ],
                                       ),
-                                    ))
-                    ],
-                  ),
+                                    ),
+                                  )
+                                : chewieController != null
+                                    ? Chewie(controller: chewieController!)
+                                    : Center(
+                                        child: BrnTagCustom(
+                                          tagText: "视屏解码完成,正在初始化播放...",
+                                          textColor: Colors.white,
+                                          fontSize: 18,
+                                          tagBorderRadius:
+                                              BorderRadius.circular(7),
+                                          textPadding: EdgeInsets.all(5),
+                                          backgroundColor: Colors.black54,
+                                        ),
+                                      ))
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: BackButton(color: Colors.white),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
-        ));
+              ),
+            ),
+            SliverToBoxAdapter(
+                child: Padding(
+              padding: const EdgeInsets.only(top: 10, left: 10),
+              child: BrnDashedLine(
+                contentWidget: Padding(
+                  child: Text(widget.videoModel.title,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14)),
+                  padding: EdgeInsets.only(left: 10),
+                ),
+                axis: Axis.vertical,
+                color: Colors.blueAccent,
+                dashedSpacing: 0,
+                dashedThickness: 2,
+              ),
+            )),
+            SliverToBoxAdapter(
+                child: Padding(
+              padding: const EdgeInsets.only(top: 10, left: 10),
+              child: Text(
+                "时长/标签: ${widget.videoModel.duration}",
+                style: TextStyle(color: Colors.redAccent, fontSize: 12),
+              ),
+            )),
+          ],
+        ),
+      ),
+    ));
   }
 
   ///初始化JavaScriptChannel
@@ -201,15 +232,11 @@ class _PlayVideoPageState extends State<PlayVideoPage> {
     setState(() {
       chewieController = ChewieController(
         videoPlayerController: videoPlayerController!,
-        aspectRatio: 2 / 1, //宽高比
+        // aspectRatio: 4 / 3, //宽高比
         autoPlay: true, //自动播放
         looping: false, //循环播放
         isLive: false,
         showOptions: false,
-        deviceOrientationsAfterFullScreen: [
-          DeviceOrientation.landscapeLeft,
-          DeviceOrientation.landscapeRight
-        ],
       );
     });
     ToastUtil.show(msg: "已开始自动播放");
