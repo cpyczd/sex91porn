@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-31 23:17:08
- * @LastEditTime: 2022-03-29 19:13:05
+ * @LastEditTime: 2022-03-29 20:08:51
  */
 import 'package:bruno/bruno.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -91,79 +91,88 @@ class _PlayVideoPageState extends State<PlayVideoPage> {
                         image: CachedNetworkImageProvider(
                             widget.videoModel.cover ?? ""),
                         fit: BoxFit.cover)),
-                child: Stack(
+                child: Column(
                   children: [
-                    Column(
-                      children: [
-                        Container(
-                            height: 0,
-                            child: isLoadSrcCode
-                                ? WebViewPlus(
-                                    javascriptMode: JavascriptMode.unrestricted,
-                                    onWebViewCreated: (controller) {
-                                      _controller = controller;
-                                      controller
-                                          .loadUrl("assets/html/index.html");
-                                    },
-                                    onPageFinished: (url) {
-                                      _requestVideoInfo();
-                                    },
-                                    javascriptChannels:
-                                        _createJavaScriptChannel(),
-                                  )
-                                : null),
-                        Expanded(
-                            flex: 1,
-                            child: onLoad
-                                ? Container(
-                                    child: Center(
-                                      child: // 模糊进度条(会执行一个旋转动画)
-                                          Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          CircularProgressIndicator(
-                                            backgroundColor: Colors.grey[200],
-                                            valueColor: AlwaysStoppedAnimation(
-                                                Colors.blue),
-                                          ),
-                                          SizedBox.fromSize(
-                                            size: Size.fromHeight(15),
-                                          ),
-                                          BrnTagCustom(
-                                            tagText: "解码视屏资源中请稍后...",
-                                            textColor: Colors.white,
-                                            fontSize: 18,
-                                            tagBorderRadius:
-                                                BorderRadius.circular(7),
-                                            textPadding: EdgeInsets.all(5),
-                                            backgroundColor: Colors.black54,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                : chewieController != null
-                                    ? Chewie(controller: chewieController!)
-                                    : Center(
-                                        child: BrnTagCustom(
-                                          tagText: "视屏解码完成,正在初始化播放...",
-                                          textColor: Colors.white,
-                                          fontSize: 18,
-                                          tagBorderRadius:
-                                              BorderRadius.circular(7),
-                                          textPadding: EdgeInsets.all(5),
-                                          backgroundColor: Colors.black54,
-                                        ),
-                                      ))
-                      ],
+                    Container(
+                      width: double.infinity,
+                      child: Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: BackButton(color: Colors.white),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              widget.videoModel.title,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
+                        ],
+                      ),
+                      color: Colors.black,
                     ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: BackButton(color: Colors.white),
-                    )
+                    Container(
+                        height: 0,
+                        child: isLoadSrcCode
+                            ? WebViewPlus(
+                                javascriptMode: JavascriptMode.unrestricted,
+                                onWebViewCreated: (controller) {
+                                  _controller = controller;
+                                  controller.loadUrl("assets/html/index.html");
+                                },
+                                onPageFinished: (url) {
+                                  _requestVideoInfo();
+                                },
+                                javascriptChannels: _createJavaScriptChannel(),
+                              )
+                            : null),
+                    Expanded(
+                        flex: 1,
+                        child: onLoad
+                            ? Container(
+                                child: Center(
+                                  child: // 模糊进度条(会执行一个旋转动画)
+                                      Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      CircularProgressIndicator(
+                                        backgroundColor: Colors.grey[200],
+                                        valueColor:
+                                            AlwaysStoppedAnimation(Colors.blue),
+                                      ),
+                                      SizedBox.fromSize(
+                                        size: Size.fromHeight(15),
+                                      ),
+                                      BrnTagCustom(
+                                        tagText: "解码视屏资源中请稍后...",
+                                        textColor: Colors.white,
+                                        fontSize: 18,
+                                        tagBorderRadius:
+                                            BorderRadius.circular(7),
+                                        textPadding: EdgeInsets.all(5),
+                                        backgroundColor: Colors.black54,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : chewieController != null
+                                ? Chewie(controller: chewieController!)
+                                : Center(
+                                    child: BrnTagCustom(
+                                      tagText: "视屏解码完成,正在初始化播放...",
+                                      textColor: Colors.white,
+                                      fontSize: 18,
+                                      tagBorderRadius: BorderRadius.circular(7),
+                                      textPadding: EdgeInsets.all(5),
+                                      backgroundColor: Colors.black54,
+                                    ),
+                                  ))
                   ],
                 ),
               ),
@@ -231,13 +240,15 @@ class _PlayVideoPageState extends State<PlayVideoPage> {
     await videoPlayerController!.initialize();
     setState(() {
       chewieController = ChewieController(
-        videoPlayerController: videoPlayerController!,
-        // aspectRatio: 4 / 3, //宽高比
-        autoPlay: true, //自动播放
-        looping: false, //循环播放
-        isLive: false,
-        showOptions: false,
-      );
+          videoPlayerController: videoPlayerController!,
+          // aspectRatio: 4 / 3, //宽高比
+          autoPlay: true, //自动播放
+          looping: false, //循环播放
+          isLive: false,
+          showOptions: false,
+          placeholder: Container(
+            color: Colors.black,
+          ));
     });
     ToastUtil.show(msg: "已开始自动播放");
   }
