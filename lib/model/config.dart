@@ -2,12 +2,13 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-26 11:06:12
- * @LastEditTime: 2021-10-02 23:57:15
+ * @LastEditTime: 2022-09-17 20:34:05
  */
 import 'package:sex_91porn/model/category_model.dart';
 
 class Config {
-  static String MAIN_URL = "https://g0727.91p47.com";
+  //91Porn首页
+  static String MAIN_URL = "https://w0831.91p30.com";
 
   static List<CategoryModel> categoryList = List.of([
     CategoryModel(

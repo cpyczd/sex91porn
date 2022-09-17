@@ -2,8 +2,9 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2021-01-31 21:38:18
- * @LastEditTime: 2021-10-03 14:03:05
+ * @LastEditTime: 2022-09-17 22:43:38
  */
+import 'package:bruno/bruno.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -92,7 +93,7 @@ class _Video91ListPageState extends State<Video91ListPage>
             )
           : GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 1),
+                  crossAxisCount: 2, childAspectRatio: .65),
               itemCount: _list.length,
               itemBuilder: (context, index) {
                 var item = _list[index];
@@ -102,59 +103,88 @@ class _Video91ListPageState extends State<Video91ListPage>
                       ToastUtil.show(msg: "该视频获取播放地址失败,无法播放");
                       return;
                     }
-                    //点击的事件
-                    Application.navigateToIos(context, "/play", params: item);
+                    //开始解析M3u8资源
+                    BrnDialogManager.showSingleButtonDialog(context,
+                        label: "取消",
+                        title: "提示",
+                        messageWidget: Container(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Column(
+                            children: [
+                              CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.blue)),
+                              SizedBox.fromSize(
+                                size: Size.fromHeight(20),
+                              ),
+                              Text("正在获取播放资源...")
+                            ],
+                          ),
+                        ), onTap: () {
+                      HttpUtil.cancel();
+                    }, barrierDismissible: false);
+                    HttpUtil.getHtml(item.href!).then((value) {
+                      var el = Uri.decodeFull(VideoPageParse.getSrcCode(value));
+                      el = el
+                          .substring(el.indexOf("'") + 1, el.indexOf("type"))
+                          .replaceAll("'", "")
+                          .trim();
+                      item.src = el;
+                      Navigator.of(context).pop();
+                      Application.navigateToIos(context, "/play", params: item);
+                    }).catchError((e) {
+                      ToastUtil.show(msg: "获取资源失败");
+                      Navigator.of(context).pop();
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(8, 0, 8, 3),
                     child: Card(
                       margin: EdgeInsets.only(bottom: 5, top: 5),
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Expanded(
-                                child: Stack(
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: item.cover ?? "",
-                                  fit: BoxFit.cover,
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  errorWidget: (c, u, e) {
-                                    return Icon(Icons.broken_image);
-                                  },
-                                  placeholder: (context, url) {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                          valueColor: AlwaysStoppedAnimation(
-                                              Colors.blue)),
-                                    );
-                                  },
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    color: Colors.redAccent,
-                                    padding: EdgeInsets.all(3),
-                                    child: Text(
-                                      item.duration ?? "-",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 10),
-                                    ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                              child: Stack(
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: item.cover ?? "",
+                                fit: BoxFit.fill,
+                                height: double.infinity,
+                                width: double.infinity,
+                                errorWidget: (c, u, e) {
+                                  return Icon(Icons.broken_image);
+                                },
+                                placeholder: (context, url) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                        valueColor: AlwaysStoppedAnimation(
+                                            Colors.blue)),
+                                  );
+                                },
+                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                  color: Colors.redAccent,
+                                  padding: EdgeInsets.all(3),
+                                  child: Text(
+                                    item.duration ?? "-",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 10),
                                   ),
-                                )
-                              ],
-                            )),
-                            SizedBox.fromSize(
-                              size: Size.fromHeight(10),
+                                ),
+                              )
+                            ],
+                          )),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 5, right: 5, bottom: 5, top: 10),
+                            child: Text(
+                              item.title,
+                              style: TextStyle(fontSize: 11),
                             ),
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                              child: Text(item.title),
-                            )
-                          ],
-                        ),
+                          )
+                        ],
                       ),
                     ),
                   ),

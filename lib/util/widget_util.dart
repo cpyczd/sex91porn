@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: chenzedeng
  * @Date: 2020-08-09 10:55:01
- * @LastEditTime: 2021-10-02 22:20:33
+ * @LastEditTime: 2022-07-19 16:34:30
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -170,7 +170,7 @@ class DialogUtil {
                 autofocus: true,
                 keyboardType: TextInputType.text,
                 maxLines: 1,
-                maxLength: 30,
+                maxLength: 255,
                 textInputAction: TextInputAction.done,
               ),
             ),
