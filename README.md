@@ -24,6 +24,8 @@ Android已经打包发布到本仓库可自行下载。
 
 IOS需要用户自己Clone代码自行构建。
 
+## 吹泡泡电报群
+https://t.me/+75WWw9f46as0NzM9
 
 ## 声明
 
